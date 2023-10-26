@@ -8,6 +8,7 @@ import { IProvider } from '@web3auth/base';
 import { WALLET_ADAPTERS } from '@web3auth/base';
 import { NetworkNames, SDKGateway, initializeSdkGateway } from "@kanalabs/mirai";
 import RPC from "./web3RPC";
+import { PrimeSdk } from '@etherspot/prime-sdk';
 
 const clientId = 'BEu0FZHBVQCJ3AUr4R7XWvUXHsGauHM0a0yiKJ0nRSy-zZStEWbQnq2yPvJqpNhmp3ywDsFWKtHoBtwY-bLY2WU';
 const chainConfig = {
@@ -25,7 +26,7 @@ function App() {
   const [web3auth, setWeb3auth] = useState<Web3AuthNoModal | null>(null);
   const [provider, setProvider] = useState<IProvider | null>(null);
   const [sdkGateway, setSdkGateway] = useState<SDKGateway>();
-  const [mumbaiInstance, setMumbaiInstance] = useState<any>(null);
+  const [mumbaiInstance, setMumbaiInstance] = useState<PrimeSdk>();
   const [balance, setBalance] = useState<string>();
 
   useEffect(() => {
@@ -103,10 +104,14 @@ function App() {
   };
 
   const checkBalance = async () => {
-    const address = await mumbaiInstance.getCounterFactualAddress();
-    const balances = await mumbaiInstance.getNativeBalance();
-    setBalance(balances);
+    if(mumbaiInstance !== undefined) {
+      const balances = await mumbaiInstance.getNativeBalance();
+      setBalance(balances);
+    }
   };
+
+  const 
+
 
 
 
@@ -123,14 +128,16 @@ function App() {
     
   const unloggedInView = (
     <>
-    <button onClick={login} style={{backgroundColor: 'white', border: '0', borderRadius: '20px', width: '20%', height: '100px', marginTop: '150px', fontSize: '60px', fontFamily: 'sans-serif' }}>Login</button>
+      <button onClick={login} style={{backgroundColor: 'white', border: '0', borderRadius: '20px', width: '20%', height: '100px', marginTop: '150px', fontSize: '60px', fontFamily: 'sans-serif' }}>Login</button>
     </>
   );
       
   return (
     <div style={{backgroundColor: 'black', height: '100vh', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column'}}>
       <img style={{width: '40%'}} src={kanalogo}></img>
-      {provider ? loggedInView  : unloggedInView }
+      {/* {provider ? loggedInView  : unloggedInView } */}
+      {loggedInView}
+      {unloggedInView}
     </div>
   );
 }
